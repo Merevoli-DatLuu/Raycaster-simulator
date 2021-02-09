@@ -9,6 +9,9 @@ SIZE = WIDTH, HEIGHT = 960, 480
 SIZE_MAP = (12, 12)
 BLOCK_SIZE = WIDTH//(2*SIZE_MAP[0])
 LINE_WEIGHT = 1
+FPS = 60
+fps_clock = pygame.time.Clock()
+
 black = (0, 0, 0)
 white = (255, 255, 255)
 yellow = (255, 255, 0)
@@ -75,7 +78,7 @@ class ViewPoint():
         self.pos = pos
         self.angel_of_straight_edge = 0
         self.angel_of_view = 60
-        self.num_line = 40
+        self.num_line = 50
         self.point_size = 6
         self.distance = 5*WIDTH//(SIZE_MAP[0]*2)
         self.moves = {
@@ -103,13 +106,25 @@ class ViewPoint():
         vec_max = int(max(abs(vec_x), abs(vec_y)))
         flag = True
         re_pos = ()
-        for i in range(1, vec_max + 1):
+
+        i = 1
+        #for i in range(1, vec_max + 1):
+        while i <= vec_max:
             re_pos = (self.pos[0] + int(vec_x*i/vec_max), self.pos[1] - int(vec_y*i/vec_max))
             if screen_map.check_pos(re_pos):
                 pygame.draw.circle(screen, (255, 0, 0), re_pos, 3)
                 pygame.draw.line(screen, white, self.pos, re_pos, 1)
                 flag = False
                 break
+            else:
+                px = 1 if vec_x > 0 else 0
+                py = 1 if vec_y < 0 else 0
+                xx = (re_pos[0]//BLOCK_SIZE + px)*BLOCK_SIZE
+                yy = (re_pos[1]//BLOCK_SIZE + py)*BLOCK_SIZE
+                i += min(abs(xx - re_pos[0]), abs(yy - re_pos[1]))
+            i += 1
+
+        # assert stt != vec_max
 
         if flag:
             pygame.draw.line(screen, white, self.pos, (self.pos[0] + vec_x, self.pos[1] - vec_y), 1)
@@ -185,6 +200,8 @@ flag = True
 screen_map = ScreenMap()
 view_point = ViewPoint((0, 0))
 while True:
+    fps_clock.tick(60)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT: 
             sys.exit()
@@ -198,6 +215,7 @@ while True:
         flag = False
 
     screen.fill(black)
+    print(fps_clock.get_fps())
     screen_map.update()
 
     if not flag:
