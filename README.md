@@ -2,7 +2,7 @@
 
 # Raycaster Simulator
 
-![preview](./preview/preview.gif
+![preview](./preview/preview.gif)
 
 </div>
 
