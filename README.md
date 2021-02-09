@@ -2,8 +2,8 @@
 
 # Raycaster Simulator
 
-![preview](./preview/preview.gif)
-<img src="./preview/preview.gif" width="960" height="480"/>
+![preview](./preview/preview.gif
+
 </div>
 
 
